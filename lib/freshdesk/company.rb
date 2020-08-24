@@ -2,13 +2,11 @@ module Freshdesk
   class Company < FreshdeskObject
     class << self
       def create(params: {})
-        response = new('/companies').resource(params: params).post
-        set_attrs_from_response(response)
+        new('/companies').resource(params: params).post
       end
 
       def retrieve(id:, query: '')
-        response = new("/companies/#{id}#{query}").resource(id: id).get
-        set_attrs_from_response(response)
+        new("/companies/#{id}#{query}").resource(id: id).get
       end
 
       def list(query: '')
