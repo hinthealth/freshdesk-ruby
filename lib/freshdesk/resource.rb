@@ -3,6 +3,7 @@ require "json"
 
 module Freshdesk
   class Resource
+    CONTENT_TYPE = 'application/json'.freeze
     def initialize(endpoint, params = {}, id = nil)
       @endpoint             = endpoint
       @params               = params
@@ -30,25 +31,25 @@ module Freshdesk
     end
 
     def post
-      @resource.post(json_payload, content_type: "application/json")
+      objectify(@resource.post(json_payload, content_type: CONTENT_TYPE))
     rescue RestClient::Exception => e
       raise e, api_error_message(e)
     end
 
     def get
-      @resource.get(accept: "application/json")
+      objectify(@resource.get(accept: CONTENT_TYPE))
     rescue RestClient::Exception => e
       raise e, api_error_message(e)
     end
 
     def delete
-      @resource.delete(accept: "application/json")
+      objectify(@resource.delete(accept: CONTENT_TYPE))
     rescue RestClient::Exception => e
       raise e, api_error_message(e)
     end
 
     def put
-      @resource.put(json_payload, content_type: "application/json")
+      objectify(@resource.put(json_payload, content_type: CONTENT_TYPE))
     rescue RestClient::Exception => e
       raise e, api_error_message(e)
     end
@@ -56,10 +57,14 @@ module Freshdesk
     private
 
     def api_error_message(e)
-      "API Error: Your request is not successful." \
-      "If you are not able to debug this error properly, mail us at support@freshdesk.com with the follwing X-Request-Id" \
+      'API Error: Your request is not successful.' \
+      'If you are not able to debug this error properly, mail us at support@freshdesk.com with the follwing X-Request-Id' \
       "X-Request-Id : #{e.response.headers[:x_request_id]}" \
       "Response Code: #{e.response.code} Response Body: #{e.response.body}"
+    end
+
+    def objectify(response)
+      JSON.parse(response, object_class: OpenStruct)
     end
   end
 end
