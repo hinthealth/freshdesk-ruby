@@ -22,7 +22,7 @@ module Freshdesk
       end
 
       def list_all_fields
-        new('/contacts_fields').resource.get
+        new('/contact_fields').resource.get
       end
     end
   end
