@@ -45,8 +45,8 @@ module Freshdesk
         new("/tickets/#{ticket_id}/satisfaction_ratings").resource.get
       end
 
-      def search(query: "")
-        new("/search/tickets?query=#{query}").resource.get
+      def search(query: '')
+        new("/search/tickets?query=\"#{query}\"").resource.get
       end
     end
   end
